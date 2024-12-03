@@ -1,0 +1,329 @@
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `COVELI`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `autor`
+--
+
+CREATE TABLE `autor` (
+  `id` smallint(4) UNSIGNED NOT NULL,
+  `apellidos` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `nombres` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `fechanacimiento` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Almacena los datso de los autores';
+
+--
+-- Volcado de datos para la tabla `autor`
+--
+
+INSERT INTO `autor` (`id`, `apellidos`, `nombres`, `fechanacimiento`) VALUES
+(1, 'Vallejo Mendoza', 'César Abraham', '1892-03-16'),
+(2, 'Vargas Llosa', 'Jorge Mario Pedro', '1936-03-28'),
+(3, 'Alegría Bazán', 'Ciro', '1909-11-04'),
+(4, 'García Márquez', 'Gabriel José de la Concordia', '1927-03-06');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `compra`
+--
+
+CREATE TABLE `compra` (
+  `uuid` char(36) COLLATE utf8_unicode_ci NOT NULL,
+  `libro_isbn` char(12) COLLATE utf8_unicode_ci NOT NULL,
+  `usuario_id` smallint(3) UNSIGNED NOT NULL,
+  `fecha` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Almacena los datso de las compras';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `libros`
+--
+
+CREATE TABLE `libros` (
+  `isbn` char(12) COLLATE utf8_unicode_ci NOT NULL,
+  `titulo` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `autor_id` smallint(4) UNSIGNED NOT NULL,
+  `anoedicion` year(4) NOT NULL,
+  `precio` decimal(3,0) UNSIGNED NOT NULL,
+  `imagen_portada` VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Almacena los datso de los libros';
+
+--
+-- Volcado de datos para la tabla `libros`
+--
+
+INSERT INTO `libros` (`isbn`, `titulo`, `autor_id`, `anoedicion`, `precio`,`imagen_portada`) VALUES
+('238874100138', 'Conversación en La Catedral', 2, 1951, '70','238874100138.jpg'),
+('383370912281', 'El mundo es ancho y ajeno', 3, 1941, '65','383370912281.jpg'),
+('480129403571', 'La ciudad y los perros', 2, 1963, '81','480129403571.jpg'),
+('483240184226', 'La serpiente de oro', 3, 1935, '85','483240184226.jpg'),
+('589120131047', 'Los perros hambrientos', 3, 1939, '31','589120131047.jpg'),
+('591338770183', 'Paco Yunque', 1, 1951, '55','591338770183.jpg'),
+('661984010128', 'El general en su laberinto', 4, 1989, '110','661984010128.jpg'),
+('683425019133', 'El coronel no tiene quien le escriba', 4, 1961, '42','683425019133.jpg'),
+('762841019387', 'Cien años de soledad', 4, 1967, '75','762841019387.jpg'),
+('890366138239', 'La fiesta del Chivo', 2, 2000, '30','890366138239.jpg'),
+('892014771852', 'Poemas humanos', 1, 1939, '120','892014771852.jpg'),
+('930281938211', 'El amor en los tiempos del cólera', 4, 1985, '38','930281938211.jpg'),
+('978318472263', 'Los heraldos negros', 1, 1919, '48','978318472263.jpg'),
+('981402938251', 'La casa verde', 2, 1966, '105','981402938251.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipousuario`
+--
+
+CREATE TABLE `tipousuario` (
+  `id` tinyint(1) UNSIGNED NOT NULL,
+  `nombre` varchar(15) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Almacena los tipos de usuarios';
+
+--
+-- Volcado de datos para la tabla `tipousuario`
+--
+
+INSERT INTO `tipousuario` (`id`, `nombre`) VALUES
+(1, 'Administrador'),
+(2, 'Cliente');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `id` smallint(3) UNSIGNED NOT NULL,
+  `usuario` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `password` char(94) COLLATE utf8_unicode_ci NOT NULL,
+  `tipousuario_id` tinyint(1) UNSIGNED NOT NULL,
+  `nombre` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `apellido_paterno` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `apellido_materno` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `direccion` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `correo_electronico` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `telefono_usuario` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Almacena los usuarios';
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id`, `usuario`, `password`, `tipousuario_id`, `nombre`, `apellido_paterno`, `apellido_materno`, `direccion`, `correo_electronico`, `telefono_usuario`) VALUES
+
+(1, 'admin', 'pbkdf2:sha256:150000$a4zbimJt$082975eae6562dfc9a3a1371def7efc6550949cd1aec627e28ca256d2eb42cb6', 1, 'admin', 'admin', 'admin', 'Av. Universidad Tecnológica 1, Palo Escrito, 62765 Emiliano Zapata, Mor.', 'admin@gmail.com', '7771546275'),
+(2, 'Ignacio', 'pbkdf2:sha256:150000$6h0cs2Fo$fe04b9b51745455490f5585435c8162aaffaa716ed1a11e3e8b5ab14006f4132', 2, 'Ignacio', 'Sanchez', 'Moreno', 'Av. Universidad Tecnológica 1, Palo Escrito, 62765 Emiliano Zapata, Mor.', 'ignacion@gmail.com', '7771348180'),
+(3, 'COVELI', 'pbkdf2:sha256:150000$0y2Q25cu$6aab315800dfb4e458349a32f5c0263205b3f3cfbabfd0458f107f34607585d6', 2, 'coveli', 'coveli', 'coveli', 'Av. Universidad Tecnológica 1, Palo Escrito, 62765 Emiliano Zapata, Mor.', 'coveli@gmail.com', '7778889345');
+
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `autor`
+--
+ALTER TABLE `autor`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `compra`
+--
+ALTER TABLE `compra`
+  ADD PRIMARY KEY (`uuid`),
+  ADD KEY `FK_compra_libro` (`libro_isbn`),
+  ADD KEY `FK_compra_usuario` (`usuario_id`);
+
+--
+-- Indices de la tabla `libros`
+--
+ALTER TABLE `libros`
+  ADD PRIMARY KEY (`isbn`),
+  ADD KEY `FK_libro_autor` (`autor_id`);
+
+--
+-- Indices de la tabla `tipousuario`
+--
+ALTER TABLE `tipousuario`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_usuario_tipousuario` (`tipousuario_id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `autor`
+--
+ALTER TABLE `autor`
+  MODIFY `id` smallint(4) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `tipousuario`
+--
+ALTER TABLE `tipousuario`
+  MODIFY `id` tinyint(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `id` smallint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `compra`
+--
+ALTER TABLE `compra`
+  ADD CONSTRAINT `FK_compra_libro` FOREIGN KEY (`libro_isbn`) REFERENCES `libros` (`isbn`),
+  ADD CONSTRAINT `FK_compra_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`);
+
+--
+-- Filtros para la tabla `libros`
+--
+ALTER TABLE `libros`
+  ADD CONSTRAINT `FK_libro_autor` FOREIGN KEY (`autor_id`) REFERENCES `autor` (`id`);
+
+--
+-- Filtros para la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD CONSTRAINT `FK_usuario_tipousuario` FOREIGN KEY (`tipousuario_id`) REFERENCES `tipousuario` (`id`);
+COMMIT;
+
+-- ----------------------------------------------------------------------------------------------------------------------------
+
+CREATE OR REPLACE VIEW vista_libros_autores AS
+SELECT 
+    LIB.isbn, 
+    LIB.titulo, 
+    LIB.anoedicion, 
+    LIB.precio, 
+    LIB.imagen_portada,
+    AUT.apellidos, 
+    AUT.nombres
+FROM 
+    libros LIB
+JOIN 
+    autor AUT 
+ON 
+    LIB.autor_id = AUT.id
+ORDER BY 
+    LIB.titulo ASC;
+
+-- ----------------------------------------------------------------------------------------------------------------------------
+
+DELIMITER //
+
+CREATE PROCEDURE listar_libros()
+BEGIN
+    SELECT * FROM vista_libros_autores;
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+
+-- ----------------------------------------------------------------------------------------------------------------------------
+
+CREATE PROCEDURE registrar_libro_y_autor (
+    IN p_isbn CHAR(12),
+    IN p_titulo VARCHAR(100),
+    IN p_apellidos VARCHAR(40),
+    IN p_nombres VARCHAR(30),
+    IN p_fechanacimiento DATE,
+    IN p_anoedicion YEAR,
+    IN p_precio DECIMAL(3,0),
+    IN p_imagen_portada VARCHAR(255)
+)
+BEGIN
+    DECLARE v_autor_id INT;
+
+    -- Registrar el autor
+    INSERT INTO autor (apellidos, nombres, fechanacimiento)
+    VALUES (p_apellidos, p_nombres, p_fechanacimiento);
+    SET v_autor_id = LAST_INSERT_ID();
+
+    -- Registrar el libro
+    INSERT INTO libros (isbn, titulo, autor_id, anoedicion, precio, imagen_portada)
+    VALUES (p_isbn, p_titulo, v_autor_id, p_anoedicion, p_precio, p_imagen_portada);
+END //
+
+DELIMITER ;
+
+-- ----------------------------------------------------------------------------------------------------------------------------
+
+DELIMITER //
+
+CREATE PROCEDURE borrar_libro(IN p_isbn CHAR(12))
+BEGIN
+    -- Borrar el libro con el ISBN dado
+    DELETE FROM libros WHERE isbn = p_isbn;
+END //
+
+DELIMITER ;
+
+-- ----------------------------------------------------------------------------------------------------------------------------
+
+DELIMITER //
+
+CREATE PROCEDURE obtener_libro_por_isbn(IN p_isbn CHAR(12))
+BEGIN
+    SELECT 
+        libros.isbn, 
+        libros.titulo, 
+        libros.anoedicion, 
+        libros.precio, 
+        libros.imagen_portada,
+        autor.nombres, 
+        autor.apellidos, 
+        autor.id
+    FROM libros
+    INNER JOIN autor ON libros.autor_id = autor.id
+    WHERE libros.isbn = p_isbn;
+END //
+
+DELIMITER ;
+
+-- ----------------------------------------------------------------------------------------------------------------------------
+
+CREATE USER 'COVELI_LOCAL'@'localhost' IDENTIFIED BY 'contrasena1';
+CREATE USER 'COVELI_REMOTO'@'%' IDENTIFIED BY '20213tn051';
+
+GRANT ALL PRIVILEGES ON tienda.* TO 'COVELI_LOCAL'@'localhost';
+GRANT ALL PRIVILEGES ON tienda.* TO 'usuario_remoto'@'%';
+FLUSH PRIVILEGES;
+
+-- ----------------------------------------------------------------------------------------------------------------------------
+
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

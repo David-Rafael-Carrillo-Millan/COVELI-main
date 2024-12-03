@@ -1,0 +1,122 @@
+{% extends './body.html' %}
+
+{% block title %}Libros disponibles{% endblock %}
+
+{% block customCSS %}
+<!-- Estilos para DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+{% endblock %}
+
+{% block container %}
+<body class="body">
+
+<h1>Libros Disponibles</h1>
+
+<!-- Mensajes flash -->
+<div class="alert alert-info mt-4" role="alert">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</div>
+
+<table id="librosTable" class="table table-striped table-hover table-dark">
+    <caption>Lista de Libros</caption>
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Nombre del autor</th>
+            <th>Precio</th>
+            <th>Año edición</th>
+            <th>Portada</th>
+            <th>Acciones</th>
+            <th>Comprado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for libro in data.libros %}
+        <tr>
+            <td>{{ libro.titulo }}</td>
+            <td>{{ libro.autor.nombre_completo() }}</td>
+            <td>${{ libro.precio }}</td>
+            <td>{{ libro.anoedicion }}</td>
+            <td>
+                {% if libro.img_portada %}
+                    <img src="{{ url_for('static', filename='img/portadas/' + libro.img_portada) }}" alt="Portada" width="50">
+                {% else %}
+                    No disponible
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('update_book', isbn=libro.isbn) }}" class="btn btn-warning"><i class="bi bi-gear-wide-connected"></i></a>
+                <form action="{{ url_for('delete_book', isbn=libro.isbn) }}" method="POST" style="display:inline;" enctype="multipart/form-data" class="delete-book-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="button" class="btn btn-danger delete-button"><i class="bi bi-trash3"></i></button>
+                </form>
+            </td>
+            <td style="text-align: center;">
+                {% if libro.isbn in data.libro_vendido %}
+                    <i class="bi bi-check-circle-fill" style="color: green;"></i>
+                {% else %}
+                    <i class="bi bi-x-circle-fill" style="color: red;"></i>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+{% endblock %}
+
+{% block customJS %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function() {
+        $('#librosTable').DataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
+            },
+            "pageLength": 10,
+            "lengthMenu": [5, 10, 20, 50],
+            "order": [[3, "desc"]]
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const deleteButtons = document.querySelectorAll('.delete-button');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault(); // Evita que se envíe el formulario de inmediato
+
+                Swal.fire({
+                    title: '¿Estás seguro de eliminar el libro?',
+                    text: "¡No podrás deshacer esta acción!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Encuentra el formulario relacionado y envíalo
+                        const form = button.closest('.delete-book-form');
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

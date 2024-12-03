@@ -1,0 +1,159 @@
+{% extends 'body.html' %}
+
+{% block title %}Agregar un libro{% endblock %}
+
+{% block customCSS  %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/update_b.css')}}">
+{% endblock %}
+
+{% block container %}
+<body class="body">
+{#    <!-- Mensajes flash (por ejemplo, confirmaciones de éxito o error) -->#}
+{#<div class="alert alert-info mt-4" role="alert">#}
+{#    {% with messages = get_flashed_messages() %}#}
+{#        {% if messages %}#}
+{#            <ul>#}
+{#                {% for message in messages %}#}
+{#                    <li>{{ message }}</li>#}
+{#                {% endfor %}#}
+{#            </ul>#}
+{#        {% endif %}#}
+{#    {% endwith %}#}
+{#</div>#}
+
+{#    <form class="form-signin" action="{{ url_for('add_book') }}" method="POST" enctype="multipart/form-data" name="add_book" id="add_book">#}
+{#    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">#}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título"#}
+{#            value="{{ request.form.get('titulo', '') }}" required />#}
+{#    </div>#}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <input type="text" class="form-control" id="anoedicion" name="anoedicion" placeholder="Año de edición"#}
+{#            value="{{ request.form.get('anoedicion', '') }}" />#}
+{#    </div>#}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <input type="number" class="form-control" id="precio" name="precio" placeholder="Precio"#}
+{#            step="0.01" value="{{ request.form.get('precio', '') }}" required />#}
+{#    </div>#}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Nombres"#}
+{#            value="{{ request.form.get('nombres', '') }}" required />#}
+{#    </div>#}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Apellidos"#}
+{#            value="{{ request.form.get('apellidos', '') }}" required />#}
+{#    </div>#}
+{##}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <input type="file" class="form-control" id="imagen" name="imagen" required />#}
+{#    </div>#}
+{##}
+{#    <button class="w-100 btn btn-lg btn-custom2" type="submit">Agregar Libro</button>#}
+{#</form>#}
+{#    <form class="form-signin" action="{{ url_for('add_book') }}" method="POST" enctype="multipart/form-data" name="add_book" id="add_book">#}
+{#    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">#}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <label for="titulo">Título del libro</label>#}
+{#        <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título"#}
+{#            value="{{ request.form.get('titulo', '') }}" required />#}
+{#    </div>#}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <label for="anoedicion">Año de edición</label>#}
+{#        <input type="number" class="form-control" id="anoedicion" name="anoedicion" placeholder="Año de edición"#}
+{#            value="{{ request.form.get('anoedicion', '') }}" min="1500" max="2024" required />#}
+{#    </div>#}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <label for="precio">Precio</label>#}
+{#        <input type="number" class="form-control" id="precio" name="precio" placeholder="Precio"#}
+{#            step="0.01" min="0" max="999" value="{{ request.form.get('precio', '') }}" required />#}
+{#    </div>#}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <label for="nombres">Nombres del autor</label>#}
+{#        <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Nombres"#}
+{#            value="{{ request.form.get('nombres', '') }}" required />#}
+{#    </div>#}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <label for="apellidos">Apellidos del autor</label>#}
+{#        <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Apellidos"#}
+{#            value="{{ request.form.get('apellidos', '') }}" required />#}
+{#    </div>#}
+{##}
+{#    <div class="form-outline mb-4">#}
+{#        <label for="imagen">Imagen del libro</label>#}
+{#        <input type="file" class="form-control" id="imagen" name="imagen" required />#}
+{#    </div>#}
+{##}
+{##}
+{#    <button class="w-100 btn btn-lg btn-custom2" type="submit">Agregar Libro</button>#}
+{#</form>#}
+
+<div class="container mt-5">
+    <div class="card p-4 shadow rounded border-0" style="max-width: 700px; margin: 0 auto;">
+        <h2 class="text-center mb-4">Agregar Nuevo Libro</h2>
+        <form class="form-signin" action="{{ url_for('add_book') }}" method="POST" enctype="multipart/form-data" name="add_book" id="add_book">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <!-- Título -->
+            <div class="form-outline mb-3">
+                <label for="titulo" class="form-label">Título del libro</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título"
+                    value="{{ request.form.get('titulo', '') }}" required />
+            </div>
+
+            <!-- Año de edición -->
+            <div class="form-outline mb-3">
+                <label for="anoedicion" class="form-label">Año de edición</label>
+                <input type="number" class="form-control" id="anoedicion" name="anoedicion" placeholder="Año de edición"
+                    value="{{ request.form.get('anoedicion', '') }}" min="1500" max="2024" required />
+            </div>
+
+            <!-- Precio -->
+            <div class="form-outline mb-3">
+                <label for="precio" class="form-label">Precio</label>
+                <input type="number" class="form-control" id="precio" name="precio" placeholder="Precio"
+                    step="0.01" min="0" max="999" value="{{ request.form.get('precio', '') }}" required />
+            </div>
+
+            <!-- Nombres del autor -->
+            <div class="form-outline mb-3">
+                <label for="nombres" class="form-label">Nombres del autor</label>
+                <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Nombres"
+                    value="{{ request.form.get('nombres', '') }}" required />
+            </div>
+
+            <!-- Apellidos del autor -->
+            <div class="form-outline mb-3">
+                <label for="apellidos" class="form-label">Apellidos del autor</label>
+                <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Apellidos"
+                    value="{{ request.form.get('apellidos', '') }}" required />
+            </div>
+
+            <!-- Imagen del libro -->
+            <div class="form-outline mb-4">
+                <label for="imagen" class="form-label">Imagen del libro</label>
+                <input type="file" class="form-control" id="imagen" name="imagen" required />
+            </div>
+
+            <!-- Botón de envío -->
+            <button class="btn btn-success w-100" type="submit" style="font-size: 18px; padding: 10px 0;">Agregar Libro</button>
+        </form>
+    </div>
+</div>
+
+
+</body>
+    {% block customJS %}
+    {% endblock %}
+
+{% endblock %}
